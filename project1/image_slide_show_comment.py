@@ -10,9 +10,14 @@ from PyQt5.QtCore import Qt
 class ImageNode:
     def __init__(self, image_path, timestamp=None):
         self.image_path = image_path
+        # 이미지 파일 경로 저장
         self.timestamp = timestamp if timestamp else time.time()
+        # 이미지 타임스탬프 저장
+        # timestamp가 주어지면 그 값 사용, 아니면 현재 시각 사용
         self.next = None
+        # 다음 노드를 가리키는 포인터, 초기값 None
         self.prev = None
+        # 이전 노드를 가리키는 포인터, 초기값 None
 
 # 이미지 연결 리스트
 # : double linked list의 구조를 활용해 이미지의 리스트 표현, 이미지 관리 위한 여러 메서드 제공
@@ -61,7 +66,9 @@ class ImageLinkedList:
     # 현재 노드의 이전 이미지로 이동
     def prev_image(self):
         if self.current and self.current.prev:
+        # current 노드와 그 이전 노드가 있으면
             self.current = self.current.prev
+            # current를 그 이전 노드로 업데이트
         else:
             self.current = self.tail
             # 리스트의 끝(tail)으로 이동
@@ -74,7 +81,7 @@ class ImageLinkedList:
             return # 아무것도 하지 않고 반환
         
         if not self.head:
-        # 현재 리스트에 노드가 없으면
+        # 현재 리스트에 노드가 없으면 전체 리스트를 전달받은 리스트로 설정
             self.head = another_list.head
             self.tail = another_list.tail
             self.current = another_list.head
@@ -92,22 +99,26 @@ class ImageLinkedList:
     def add_image(self, image_path):
         self.append(image_path)
 
-    # current 노드를 리스트에서 제거
+    # current 노드를 doubly linked list에서 제거하고, 그 다음/이전 이미지를 현재 이미지로 업데이트하는 역할
     def remove_image(self):
         if not self.current:
-            return None
+            return None # 현재 노드가 None이면 메서드 종료
         
+        # current 노드의 이전 노드(prev)를 확인하여 연결을 재구성
         if self.current.prev:
             self.current.prev.next = self.current.next
-        else:
+        else: # 현재 노드가 첫 번째 노드라면
             self.head = self.current.next
 
+        # current 노드의 다음 노드(next)를 확인하여 연결을 재구성
         if self.current.next:
             self.current.next.prev = self.current.prev
-        else:
+        else: # 현재 노드가 마지막 노드라면
             self.tail = self.current.prev
 
         deleted_node = self.current # 현재 노드를 deleted_node에 저장
+
+        # 현재 노드(current) 업데이트
         if self.current.next:
             self.current = self.current.next
         elif self.current.prev:
