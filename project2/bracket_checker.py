@@ -42,6 +42,8 @@ class BracketCheckerApp(QWidget):
         checker = BracketChecker()
         messages, is_valid = checker.check_brackets(expr)
 
+        print("\n" + "-" * 50 + "\n")
+
         # 파이썬 콘솔에 상세 결과 출력
         for message in messages:
             print(message)
