@@ -55,13 +55,16 @@ class BracketCheckerApp(QWidget):
         if not expr.strip():  # 입력받은 문자열이 비어있는 경우
         # strip(): 입력된 문자열의 앞뒤 공백을 제거
             self.output_area.setPlainText("Empty expression provided.") # self.output_area에 메시지 표시 후
-            return # 메서드 종료
+            return # 메서드 종료 후 호출한 곳으로 돌아감
+            # QPushButton의 클릭 이벤트에 의해 호출됨
 
         checker = BracketChecker() # BracketChecker() 클래스의 인스턴스 생성
         messages, is_valid = checker.check_brackets(expr)
         # checker.check_brackets(expr) 메서드 호출해 사용자 입력에 대한 괄호 검사 수행, 이 메서드는 messages, is_valid를 반환함
         # messages: 괄호 검사 과정에서 발생한 모든 메시지 리스트
         # is_valid: 괄호가 올바르게 닫혔는지를 나타내는 불리언 값
+
+        print("\n" + "-" * 50 + "\n")
 
         # 파이썬 콘솔에 상세 결과 출력
         for message in messages:
@@ -79,15 +82,15 @@ class BracketCheckerApp(QWidget):
     '''
 
 
-class Stack: # 스택 자료구조(스택의 기본 연산) 구현하는 클래스
+class Stack: # 스택 자료구조(스택의 기본 연산, LIFO) 구현하는 클래스
     def __init__(self): # 생성자 메서드, 스택 초기화 시 호출
         self.items = [] # 스택에 저장될 요소들을 담는 리스트, 초기에는 비어있음
 
-    def push(self, item): # 스택에 새로운 요소 추가하는 메서드
+    def push(self, item): # 스택에 새로운 요소 추가하는 메서드, O(1)
         self.items.append(item)
         # 스택의 맨 위에 항목을 추가한다. (리스트의 끝에 item을 추가)
 
-    def pop(self): # 스택 맨 위의 요소를 제거하고 반환하는 메서드
+    def pop(self): # 스택 맨 위의 요소를 제거하고 반환하는 메서드, O(1)
         if not self.is_empty(): # 스택이 비어있지 않으면
             return self.items.pop() # pop 메서드로 맨 위의 요소 제거하고 반환
         return None # 스택이 비어있다면 None 반환
@@ -97,11 +100,11 @@ class Stack: # 스택 자료구조(스택의 기본 연산) 구현하는 클래�
             return self.items[-1] # items 리스트의 마지막 요소 반환
         return None # 스택이 비어있다면 None 반환
 
-    def is_empty(self): # 스택이 비어있는지 여부 확인하는 메서드(불리언)
+    def is_empty(self): # 스택이 비어있는지 여부 확인하는 메서드(불리언), O(1)
         return len(self.items) == 0
         # self.items의 길이가 0이면 True, 아니면 False 반환
 
-    def size(self): # 스택에 저장된 요소의 수를 반환하는 메서드
+    def size(self): # 스택에 저장된 요소의 수를 반환하는 메서드, O(1)
         return len(self.items) # self.items의 길이 반환
 
     def __repr__(self): # 스택의 요소들을 문자열로 나타내기 위한 메서드
@@ -156,8 +159,9 @@ class BracketChecker:
 
         return result_messages, self.stack.is_empty()
         # 모든 문자를 순회한 뒤 결과 메시지와 스택이 비어 있는지 여부 반환(True or False)
+        # check_brackets 메서드가 처리한 결과를 다른 메서드에서 사용하기 위해 return 사용 (BracketChecker 클래스에서 괄호 검사의 결과를 BracketCheckerApp 클래스로 전달하는 데 사용)
 
-# 코드 실행시 시작점
+# 코드 실행 시 시작점
 if __name__ == '__main__': # 스크립트가 직접 실행될 때만 내부 코드 실행, 모듈로 임포트 시 실행 X
     app = QApplication(sys.argv)
     # QApplication: PyQt의 GUI 애플리케이션을 시작하기 위해 필요한 객체

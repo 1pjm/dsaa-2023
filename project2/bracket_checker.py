@@ -26,6 +26,7 @@ class BracketCheckerApp(QWidget):
         layout.addWidget(self.output_label)
         layout.addWidget(self.output_area)
 
+        # 구성 레이아웃 윈도우에 적용
         self.setLayout(layout)
 
         # 기본 창 설정
@@ -41,6 +42,8 @@ class BracketCheckerApp(QWidget):
 
         checker = BracketChecker()
         messages, is_valid = checker.check_brackets(expr)
+
+        print("\n" + "-" * 50 + "\n")
 
         # 파이썬 콘솔에 상세 결과 출력
         for message in messages:
@@ -61,7 +64,7 @@ class Stack:
         self.items.append(item)
 
     def pop(self):
-        if not self.is_empty():
+        if not self.is_empty(): # 스택이 비어있지 않으면
             return self.items.pop()
         return None
 
