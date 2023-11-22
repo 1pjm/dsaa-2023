@@ -10,7 +10,7 @@ class BracketCheckerApp(QWidget):
         super().__init__()
         # 부모 클래스인 QWidget의 생성자 호출, 기본적인 윈도우 설정 초기화
         self.init_ui()
-        # GUI 구성 요소 생성 및 배치
+        # GUI 구성 요소 생성 및 배치, BracketCheckerApp 객체 생성될 때 실행
 
     def init_ui(self):
         # UI 구성 요소 생성
