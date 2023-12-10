@@ -49,7 +49,7 @@ def insertion_sort(files, key, reverse=False):
         key_file = files[i]
         j = i - 1
         while j >= 0 and ((reverse and getattr(files[j], key) < getattr(key_file, key)) or
-                        (not reverse and getattr(files[j], key) > getattr(key_file, key))):
+                          (not reverse and getattr(files[j], key) > getattr(key_file, key))):
             files[j + 1] = files[j]
             j -= 1
             swap_count += 1
@@ -59,37 +59,36 @@ def insertion_sort(files, key, reverse=False):
 
 
 def quick_sort(files, key, reverse=False):
-    def _quick_sort(items, low, high, swap_count):
+    def _quick_sort(items, low, high):
+        swap_count = 0
         if low < high:
-            pivot_index, swap_count = partition(items, low, high, swap_count)
-            swap_count = _quick_sort(items, low, pivot_index, swap_count)
-            swap_count = _quick_sort(items, pivot_index + 1, high, swap_count)
+            pivot_index, pivot_swap_count = partition(items, low, high)
+            swap_count += pivot_swap_count
+            left_swap_count = _quick_sort(items, low, pivot_index)
+            right_swap_count = _quick_sort(items, pivot_index + 1, high)
+            swap_count += left_swap_count + right_swap_count
         return swap_count
 
-    def partition(items, low, high, swap_count):
-        pivot = items[low]
-        left = low + 1
-        right = high
-        done = False
-        while not done:
-            while left <= right and ((reverse and getattr(items[left], key) <= getattr(pivot, key)) or
-                                    (not reverse and getattr(items[left], key) >= getattr(pivot, key))):
-                left += 1
-            while ((reverse and getattr(items[right], key) >= getattr(pivot, key)) or
-                    (not reverse and getattr(items[right], key) <= getattr(pivot, key))) and right >= left:
-                right -= 1
-            if right < left:
-                done = True
-            else:
-                items[left], items[right] = items[right], items[left]
-                swap_count += 1
-                print(f"Quick Sort Step: {items}")
-        items[low], items[right] = items[right], items[low]
-        swap_count += 1
-        return right, swap_count
+    def partition(items, low, high):
+        pivot = getattr(items[(low + high) // 2], key)
+        swap_count = 0
+        while True:
+            while (reverse and getattr(items[low], key) > pivot) or \
+                    (not reverse and getattr(items[low], key) < pivot):
+                low += 1
+            while (reverse and getattr(items[high], key) < pivot) or \
+                    (not reverse and getattr(items[high], key) > pivot):
+                high -= 1
+            if low >= high:
+                return high, swap_count
+            items[low], items[high] = items[high], items[low]
+            swap_count += 1
+            print(f"Quick Sort Swap: {items}")
+            low += 1
+            high -= 1
 
-    swap_count = _quick_sort(files, 0, len(files) - 1, 0)
-    return files, swap_count
+    total_swap_count = _quick_sort(files, 0, len(files) - 1)
+    return files, total_swap_count
 
 
 def merge_sort(files, key, reverse=False):
@@ -234,7 +233,7 @@ class MainWindow(QMainWindow):
         swap_count = 0
         time_complexity = ""
         start_time = time.time()
-        print("정렬을 시작합니다.")
+        print("\n정렬을 시작합니다.")
 
         if algorithm == '버블 정렬':
             sorted_files, swap_count = bubble_sort(files.copy(), key, reverse)
@@ -257,7 +256,7 @@ class MainWindow(QMainWindow):
             return None, None
 
         end_time = time.time()
-        print("정렬이 끝났습니다.")
+        print("정렬이 끝났습니다.\n")
         elapsed_time = end_time - start_time
 
         self.text_edit.append(
@@ -266,7 +265,7 @@ class MainWindow(QMainWindow):
         self.text_edit.append(f"Total time: {elapsed_time:.2f} seconds")
         self.text_edit.append(f"Total swaps: {swap_count}")
 
-        print(f"Sorted files: {sorted_files}")
+        print(f"Sorted files: {sorted_files}\n")
 
         return algorithm, elapsed_time
 
