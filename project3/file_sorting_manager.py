@@ -49,7 +49,7 @@ def insertion_sort(files, key, reverse=False):
         key_file = files[i]
         j = i - 1
         while j >= 0 and ((reverse and getattr(files[j], key) < getattr(key_file, key)) or
-                          (not reverse and getattr(files[j], key) > getattr(key_file, key))):
+                        (not reverse and getattr(files[j], key) > getattr(key_file, key))):
             files[j + 1] = files[j]
             j -= 1
             swap_count += 1

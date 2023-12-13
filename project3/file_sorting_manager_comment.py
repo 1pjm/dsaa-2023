@@ -155,6 +155,7 @@ def merge_sort(files, key, reverse=False):  # 머지 정렬 함수
                     # 두 부분 리스트의 현재 요소를 비교하여 적절한 요소를 선택
                     items[k] = left_half[i]
                     i += 1
+                    # 정렬 순서에 맞게 요소가 배치되어 있으면 
                 else:
                     items[k] = right_half[j]
                     j += 1
