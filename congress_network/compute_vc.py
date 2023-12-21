@@ -14,7 +14,7 @@ from matplotlib import pyplot as plt
 
 tol = 0.001
 
-f = open('congress_network_data.json')
+f = open('c:/Users/samsung/workspace/dsaa-2023/congress_network/congress_network_data.json')
 data = json.load(f)
 
 inList = data[0]['inList']
